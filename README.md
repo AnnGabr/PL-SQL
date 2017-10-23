@@ -1,3 +1,1 @@
 # PL-SQL
-
-some queries
