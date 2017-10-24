@@ -1,82 +1,82 @@
 -------------------------------------------------
---ПРОСТЕЙШИЕ ЗАПРОСЫ: /////////////////////////////
+--РџР РћРЎРўР•Р™РЁРР• Р—РђРџР РћРЎР«: /////////////////////////////
 -------------------------------------------------
---Выдать информацию о местоположении отдела продаж (SALES) компании.
-	SELECT DEPTADDR FROM DEPT WHERE LOWER(DEPTNAME) = 'sales';
---Выдать информацию об отделах, расположенных в Chicago и New York.
-	SELECT * FROM DEPT WHERE LOWER(DEPTADDR) IN ('new york', 'chicago');
+--Р’С‹РґР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРё РѕС‚РґРµР»Р° РїСЂРѕРґР°Р¶ (SALES) РєРѕРјРїР°РЅРёРё.
+SELECT DEPTADDR FROM DEPT WHERE LOWER(DEPTNAME) = 'sales';
+--Р’С‹РґР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РѕС‚РґРµР»Р°С…, СЂР°СЃРїРѕР»РѕР¶РµРЅРЅС‹С… РІ Chicago Рё New York.
+SELECT * FROM DEPT WHERE LOWER(DEPTADDR) IN ('new york', 'chicago');
 -------------------------------------------------
---ФУНКЦИИ: ////////////////////////////////////////
+--Р¤РЈРќРљР¦РР: ////////////////////////////////////////
 -------------------------------------------------
---Найти минимальную заработную плату, начисленную в 2009 году.
-	SELECT MIN(SALVALUE) FROM SALARY WHERE YEAR = 2009;
---Выдать информацию обо всех работниках, родившихся не позднее 1 января 1960 года.
-	SELECT * FROM EMP WHERE BIRTHDATE <= to_date('01.01.1960','dd.mm.yyyy');
---Подсчитать число работников, сведения о которых имеются в базе данных .
-	SELECT COUNT(*) FROM EMP;
---Найти работников, чьё имя состоит из одного слова. Имена выдать на нижнем регистре, с удалением стоящей справа буквы t.
-	SELECT REGEXP_REPLACE(LOWER(EMPNAME), 't$') NAME FROM EMP WHERE EMPNAME NOT LIKE('% %');
---Выдать информацию о работниках, указав дату рождения в формате день(число), месяц(название), год(название). 
-	SELECT EMPNO, TO_CHAR( BIRTHDATE, 'dd-MONTH-YEAR') BIRTHDATE, EMPNAME, MANAGER_ID FROM EMP;
---Тоже, но год числом.
-	SELECT EMPNO, TO_CHAR( BIRTHDATE, 'dd-MONTH-yyyy') BIRTHDATE, EMPNAME, MANAGER_ID FROM EMP;
---Выдать информацию о должностях, изменив названия должности “CLERK” и “DRIVER” на “WORKER”.
-	SELECT JOBNO, REGEXP_REPLACE(JOBNAME, 'CLERK|DRIVER', 'WORKER') NEWJOBNAME, MINSALARY FROM JOB;
+--РќР°Р№С‚Рё РјРёРЅРёРјР°Р»СЊРЅСѓСЋ Р·Р°СЂР°Р±РѕС‚РЅСѓСЋ РїР»Р°С‚Сѓ, РЅР°С‡РёСЃР»РµРЅРЅСѓСЋ РІ 2009 РіРѕРґСѓ.
+SELECT MIN(SALVALUE) FROM SALARY WHERE YEAR = 2009;
+--Р’С‹РґР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР±Рѕ РІСЃРµС… СЂР°Р±РѕС‚РЅРёРєР°С…, СЂРѕРґРёРІС€РёС…СЃСЏ РЅРµ РїРѕР·РґРЅРµРµ 1 СЏРЅРІР°СЂСЏ 1960 РіРѕРґР°.
+SELECT * FROM EMP WHERE BIRTHDATE <= to_date('01.01.1960','dd.mm.yyyy');
+--РџРѕРґСЃС‡РёС‚Р°С‚СЊ С‡РёСЃР»Рѕ СЂР°Р±РѕС‚РЅРёРєРѕРІ, СЃРІРµРґРµРЅРёСЏ Рѕ РєРѕС‚РѕСЂС‹С… РёРјРµСЋС‚СЃСЏ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С… .
+SELECT COUNT(*) FROM EMP;
+--РќР°Р№С‚Рё СЂР°Р±РѕС‚РЅРёРєРѕРІ, С‡СЊС‘ РёРјСЏ СЃРѕСЃС‚РѕРёС‚ РёР· РѕРґРЅРѕРіРѕ СЃР»РѕРІР°. РРјРµРЅР° РІС‹РґР°С‚СЊ РЅР° РЅРёР¶РЅРµРј СЂРµРіРёСЃС‚СЂРµ, СЃ СѓРґР°Р»РµРЅРёРµРј СЃС‚РѕСЏС‰РµР№ СЃРїСЂР°РІР° Р±СѓРєРІС‹ t.
+SELECT REGEXP_REPLACE(LOWER(EMPNAME), 't$') NAME FROM EMP WHERE EMPNAME NOT LIKE('% %');
+--Р’С‹РґР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЂР°Р±РѕС‚РЅРёРєР°С…, СѓРєР°Р·Р°РІ РґР°С‚Сѓ СЂРѕР¶РґРµРЅРёСЏ РІ С„РѕСЂРјР°С‚Рµ РґРµРЅСЊ(С‡РёСЃР»Рѕ), РјРµСЃСЏС†(РЅР°Р·РІР°РЅРёРµ), РіРѕРґ(РЅР°Р·РІР°РЅРёРµ). 
+SELECT EMPNO, TO_CHAR( BIRTHDATE, 'dd-MONTH-YEAR') BIRTHDATE, EMPNAME, MANAGER_ID FROM EMP;
+--РўРѕР¶Рµ, РЅРѕ РіРѕРґ С‡РёСЃР»РѕРј.
+SELECT EMPNO, TO_CHAR( BIRTHDATE, 'dd-MONTH-yyyy') BIRTHDATE, EMPNAME, MANAGER_ID FROM EMP;
+--Р’С‹РґР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РґРѕР»Р¶РЅРѕСЃС‚СЏС…, РёР·РјРµРЅРёРІ РЅР°Р·РІР°РЅРёСЏ РґРѕР»Р¶РЅРѕСЃС‚Рё вЂњCLERKвЂќ Рё вЂњDRIVERвЂќ РЅР° вЂњWORKERвЂќ.
+SELECT JOBNO, REGEXP_REPLACE(JOBNAME, 'CLERK|DRIVER', 'WORKER') NEWJOBNAME, MINSALARY FROM JOB;
 -------------------------------------------------
 --HAVING: /////////////////////////////////////////
 -------------------------------------------------
---Определите среднюю зарплату за годы, в которые были начисления не менее чем за три месяца.
-	SELECT YEAR, AVG(SALVALUE) AVG_SALEVALUE FROM SALARY GROUP BY YEAR HAVING COUNT(MONTH) > 2;
+--РћРїСЂРµРґРµР»РёС‚Рµ СЃСЂРµРґРЅСЋСЋ Р·Р°СЂРїР»Р°С‚Сѓ Р·Р° РіРѕРґС‹, РІ РєРѕС‚РѕСЂС‹Рµ Р±С‹Р»Рё РЅР°С‡РёСЃР»РµРЅРёСЏ РЅРµ РјРµРЅРµРµ С‡РµРј Р·Р° С‚СЂРё РјРµСЃСЏС†Р°.
+SELECT YEAR, AVG(SALVALUE) AVG_SALEVALUE FROM SALARY GROUP BY YEAR HAVING COUNT(MONTH) > 2;
 -------------------------------------------------
---СОЕДИНЕНИЕ ПО РАВЕНСТВУ: ////////////////////////
+--РЎРћР•Р”РРќР•РќРР• РџРћ Р РђР’Р•РќРЎРўР’РЈ: ////////////////////////
 -------------------------------------------------
---Выведете ведомость получения зарплаты с указанием имен служащих.
-	SELECT EMP.EMPNAME, SALARY.SALVALUE, SALARY.MONTH, SALARY.YEAR FROM EMP, SALARY WHERE EMP.EMPNO=SALARY.EMPNO; 	
+--Р’С‹РІРµРґРµС‚Рµ РІРµРґРѕРјРѕСЃС‚СЊ РїРѕР»СѓС‡РµРЅРёСЏ Р·Р°СЂРїР»Р°С‚С‹ СЃ СѓРєР°Р·Р°РЅРёРµРј РёРјРµРЅ СЃР»СѓР¶Р°С‰РёС….
+SELECT EMP.EMPNAME, SALARY.SALVALUE, SALARY.MONTH, SALARY.YEAR FROM EMP, SALARY WHERE EMP.EMPNO=SALARY.EMPNO; 	
 -------------------------------------------------
---СОЕДИНЕНИЕ НЕ ПО РАВЕНСТВУ: /////////////////////
+--РЎРћР•Р”РРќР•РќРР• РќР• РџРћ Р РђР’Р•РќРЎРўР’РЈ: /////////////////////
 -------------------------------------------------
---Укажите  сведения о начислении сотрудникам зарплаты, попадающей в вилку: минимальный оклад по должности - минимальный оклад по должности плюс пятьсот. Укажите соответствующую вилке  должность.
-	SELECT EMP.EMPNAME, JOB.JOBNAME, SALARY.SALVALUE
+--РЈРєР°Р¶РёС‚Рµ  СЃРІРµРґРµРЅРёСЏ Рѕ РЅР°С‡РёСЃР»РµРЅРёРё СЃРѕС‚СЂСѓРґРЅРёРєР°Рј Р·Р°СЂРїР»Р°С‚С‹, РїРѕРїР°РґР°СЋС‰РµР№ РІ РІРёР»РєСѓ: РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РѕРєР»Р°Рґ РїРѕ РґРѕР»Р¶РЅРѕСЃС‚Рё - РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РѕРєР»Р°Рґ РїРѕ РґРѕР»Р¶РЅРѕСЃС‚Рё РїР»СЋСЃ РїСЏС‚СЊСЃРѕС‚. РЈРєР°Р¶РёС‚Рµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰СѓСЋ РІРёР»РєРµ  РґРѕР»Р¶РЅРѕСЃС‚СЊ.
+SELECT EMP.EMPNAME, JOB.JOBNAME, SALARY.SALVALUE
     FROM SALARY 
-        INNER JOIN EMP 
-            ON SALARY.EMPNO = EMP.EMPNO 
-        INNER JOIN CAREER 
-            ON CAREER.EMPNO = EMP.EMPNO 
-        INNER JOIN JOB 
-            ON JOB.JOBNO = CAREER.JOBNO
-    WHERE SALARY.SALVALUE >= JOB.MINSALARY 
-        AND SALARY.SALVALUE <= JOB.MINSALARY + 500;
+	INNER JOIN EMP 
+	    ON SALARY.EMPNO = EMP.EMPNO 
+	INNER JOIN CAREER 
+	    ON CAREER.EMPNO = EMP.EMPNO 
+	INNER JOIN JOB 
+	    ON JOB.JOBNO = CAREER.JOBNO
+	WHERE SALARY.SALVALUE >= JOB.MINSALARY 
+    AND SALARY.SALVALUE <= JOB.MINSALARY + 500;
 -------------------------------------------------
---ОБЪЕДИНЕНИЕ ТАБЛИЦ: /////////////////////////////
+--РћР‘РЄР•Р”РРќР•РќРР• РўРђР‘Р›РР¦: /////////////////////////////
 -------------------------------------------------
---ВНУТРЕННЕЕ: /////////////////////////////////////
+--Р’РќРЈРўР Р•РќРќР•Р•: /////////////////////////////////////
 -------------------------------------------------
---Укажите сведения о заработной плате, совпадающей с минимальными окладами по должностям (с указанием этих должностей).
-	SELECT SALARY.EMPNO, SALARY.MONTH, SALARY.YEAR, SALARY.SALVALUE, JOB.JOBNAME FROM SALARY JOIN JOB ON SALARY.SALVALUE=JOB.MINSALARY;
+--РЈРєР°Р¶РёС‚Рµ СЃРІРµРґРµРЅРёСЏ Рѕ Р·Р°СЂР°Р±РѕС‚РЅРѕР№ РїР»Р°С‚Рµ, СЃРѕРІРїР°РґР°СЋС‰РµР№ СЃ РјРёРЅРёРјР°Р»СЊРЅС‹РјРё РѕРєР»Р°РґР°РјРё РїРѕ РґРѕР»Р¶РЅРѕСЃС‚СЏРј (СЃ СѓРєР°Р·Р°РЅРёРµРј СЌС‚РёС… РґРѕР»Р¶РЅРѕСЃС‚РµР№).
+SELECT SALARY.EMPNO, SALARY.MONTH, SALARY.YEAR, SALARY.SALVALUE, JOB.JOBNAME FROM SALARY JOIN JOB ON SALARY.SALVALUE=JOB.MINSALARY;
 -------------------------------------------------
---ЕСТЕСТВЕННОЕ: ///////////////////////////////////
+--Р•РЎРўР•РЎРўР’Р•РќРќРћР•: ///////////////////////////////////
 -------------------------------------------------
---Найдите сведения о карьере сотрудников с указанием вместо номера сотрудника его имени.
-	SELECT EMP.EMPNAME, CAREER.JOBNO, CAREER.DEPTNO, CAREER.STARTDATE, CAREER.ENDDATE FROM EMP NATURAL JOIN CAREER; 
+--РќР°Р№РґРёС‚Рµ СЃРІРµРґРµРЅРёСЏ Рѕ РєР°СЂСЊРµСЂРµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ СЃ СѓРєР°Р·Р°РЅРёРµРј РІРјРµСЃС‚Рѕ РЅРѕРјРµСЂР° СЃРѕС‚СЂСѓРґРЅРёРєР° РµРіРѕ РёРјРµРЅРё.
+SELECT EMP.EMPNAME, CAREER.JOBNO, CAREER.DEPTNO, CAREER.STARTDATE, CAREER.ENDDATE FROM EMP NATURAL JOIN CAREER; 
 -------------------------------------------------
---ПРОСТОЕ ВНУТРЕННЕЕ СОЕДИНЕНИЕ: //////////////////
+--РџР РћРЎРўРћР• Р’РќРЈРўР Р•РќРќР•Р• РЎРћР•Р”РРќР•РќРР•: //////////////////
 -------------------------------------------------
---Найдите  сведения о карьере сотрудников с указанием вместо номера сотрудника его имени.
-	SELECT EMP.EMPNAME, CAREER.JOBNO, CAREER.DEPTNO, CAREER.STARTDATE, CAREER.ENDDATE FROM EMP JOIN CAREER ON EMP.EMPNO = CAREER.EMPNO;
+--РќР°Р№РґРёС‚Рµ  СЃРІРµРґРµРЅРёСЏ Рѕ РєР°СЂСЊРµСЂРµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ СЃ СѓРєР°Р·Р°РЅРёРµРј РІРјРµСЃС‚Рѕ РЅРѕРјРµСЂР° СЃРѕС‚СЂСѓРґРЅРёРєР° РµРіРѕ РёРјРµРЅРё.
+SELECT EMP.EMPNAME, CAREER.JOBNO, CAREER.DEPTNO, CAREER.STARTDATE, CAREER.ENDDATE FROM EMP JOIN CAREER ON EMP.EMPNO = CAREER.EMPNO;
 -------------------------------------------------
---ОБЪЕДИНЕНИЕ ТРЁХ И БОЛЬШЕГО ЧИСЛА ТАБЛИЦ: ///////
+--РћР‘РЄР•Р”РРќР•РќРР• РўР РЃРҐ Р Р‘РћР›Р¬РЁР•Р“Рћ Р§РРЎР›Рђ РўРђР‘Р›РР¦: ///////
 -------------------------------------------------
---Выдайте сведения о карьере сотрудников с указанием их имён, наименования должности, и названия отдела.
-	SELECT EMP.EMPNAME, JOB.JOBNAME, DEPT.DEPTNAME, CAREER.STARTDATE, CAREER.ENDDATE 
-		FROM CAREER 
-		JOIN EMP ON EMP.EMPNO = CAREER.EMPNO
-		JOIN DEPT ON CAREER.DEPTNO=DEPT.DEPTNO
-		JOIN JOB ON CAREER.JOBNO=JOB.JOBNO;
+--Р’С‹РґР°Р№С‚Рµ СЃРІРµРґРµРЅРёСЏ Рѕ РєР°СЂСЊРµСЂРµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ СЃ СѓРєР°Р·Р°РЅРёРµРј РёС… РёРјС‘РЅ, РЅР°РёРјРµРЅРѕРІР°РЅРёСЏ РґРѕР»Р¶РЅРѕСЃС‚Рё, Рё РЅР°Р·РІР°РЅРёСЏ РѕС‚РґРµР»Р°.
+SELECT EMP.EMPNAME, JOB.JOBNAME, DEPT.DEPTNAME, CAREER.STARTDATE, CAREER.ENDDATE 
+	FROM CAREER 
+	JOIN EMP ON EMP.EMPNO = CAREER.EMPNO
+	JOIN DEPT ON CAREER.DEPTNO=DEPT.DEPTNO
+	JOIN JOB ON CAREER.JOBNO=JOB.JOBNO;
 -------------------------------------------------
---ВНЕШНЕЕ ОБЪЕДИНЕНИЕ: ////////////////////////////
+--Р’РќР•РЁРќР•Р• РћР‘РЄР•Р”РРќР•РќРР•: ////////////////////////////
 -------------------------------------------------
---Выдайте сведения о карьере сотрудников с указанием их имён. 
-	SELECT EMP.EMPNAME, CAREER.STARTDATE, CAREER.ENDDATE
-    		FROM EMP
-        	FULL OUTER JOIN CAREER
-            	ON EMP.EMPNO = CAREER.EMPNO;
+--Р’С‹РґР°Р№С‚Рµ СЃРІРµРґРµРЅРёСЏ Рѕ РєР°СЂСЊРµСЂРµ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ СЃ СѓРєР°Р·Р°РЅРёРµРј РёС… РёРјС‘РЅ. 
+SELECT EMP.EMPNAME, CAREER.STARTDATE, CAREER.ENDDATE
+	FROM EMP
+	FULL OUTER JOIN CAREER
+	ON EMP.EMPNO = CAREER.EMPNO;
