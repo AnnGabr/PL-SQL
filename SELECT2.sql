@@ -4,7 +4,7 @@
 ------------------------------------------------------
 --1.  Найти имена сотрудников, получивших за годы начисления зарплаты минимальную зарплату.
 SELECT EMP.EMPNAME, SALARY.SALVALUE FROM EMP NATURAL 
-      JOIN SALARY WHERE SALARY.SALVALUE IN( SELECT MIN(SALARY.SALVALUE) FROM SALARY )
+      JOIN SALARY WHERE SALARY.SALVALUE IN( SELECT MIN(SALARY.SALVALUE) FROM SALARY );
 ------------------------------------------------------
 --ПОДЗАПРОСЫ, ВОЗВРАЩАЮЩИЕ БОЛЕЕ ОДНОЙ СТРОКИ
 ------------------------------------------------------
@@ -12,7 +12,7 @@ SELECT EMP.EMPNAME, SALARY.SALVALUE FROM EMP NATURAL
 SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO) 
       WHERE CAREER.DEPTNO 
             IN( SELECT CAREER.DEPTNO FROM EMP JOIN CAREER USING (EMPNO) WHERE LOWER(EMP.EMPNAME)='richard martin' GROUP BY CAREER.DEPTNO) 
-      GROUP BY EMP.EMPNAME
+      GROUP BY EMP.EMPNAME;
 ------------------------------------------------------      
 --СРАВНЕНИЕ БОЛЕЕ ЧЕМ ПО ОДНОМУ ЗНАЧЕНИЮ
 ------------------------------------------------------
@@ -20,7 +20,7 @@ SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO)
 SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO) 
       WHERE (CAREER.DEPTNO, CAREER.JOBNO)
             IN( SELECT CAREER.DEPTNO, CAREER.JOBNO FROM EMP JOIN CAREER USING (EMPNO) WHERE LOWER(EMP.EMPNAME)='richard martin' ) 
-      GROUP BY EMP.EMPNAME
+      GROUP BY EMP.EMPNAME;
 ------------------------------------------------------
 --ОПЕРАТОРЫ ANY/ALL
 ------------------------------------------------------
@@ -42,14 +42,16 @@ SELECT YEAR FROM SALARY
       GROUP BY YEAR 
       HAVING AVG(SALVALUE) > (SELECT AVG(SALARY.SALVALUE) FROM SALARY);
 ------------------------------------------------------
-КОРРЕЛИРУЮЩИЕ ПОДЗАПРОСЫ
+--КОРРЕЛИРУЮЩИЕ ПОДЗАПРОСЫ
+------------------------------------------------------
+--7.  Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты.
+ SELECT CAREER.DEPTNO FROM CAREER JOIN SALARY USING(EMPNO) WHERE CAREER.DEPTNO IS NOT NULL GROUP BY DEPTNO;
+------------------------------------------------------
+--ОПЕРАТОР EXISTS
+------------------------------------------------------
+--8.	Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты.
 
-7.    Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты. 
-
-ОПЕРАТОР EXISTS
-
-8.	Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты.
-
+------------------------------------------------------
       ОПЕРАТОР NOT EXISTS
 
 9.	Определить номера отделов, для сотрудников которых не начислялась зарплата.
