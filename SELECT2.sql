@@ -32,13 +32,15 @@ SELECT EMPNO FROM EMP
 --5.  Найти сведения о номерах сотрудников, получивших зарплату за какой-либо месяц большую, чем средние зарплаты за все годы начислений.
 SELECT EMPNO FROM EMP 
       JOIN SALARY USING (EMPNO) 
-      WHERE SALARY.SALVALUE >  ANY (SELECT AVG(SALARY.SALVALUE) FROM SALARY GROUP BY YEAR)
+      WHERE SALARY.SALVALUE > ALL (SELECT AVG(SALARY.SALVALUE) FROM SALARY GROUP BY YEAR)
       GROUP BY EMPNO;
 ------------------------------------------------------
 --ИСПОЛЬЗОВАНИЕ HAVING С ВЛОЖЕННЫМИ ПОДЗАПРОСАМИ
 ------------------------------------------------------
 --6.	Определить годы, в которые начисленная средняя зарплата была больше средней зарплаты за все годы начислений.
-
+SELECT YEAR FROM SALARY 
+      GROUP BY YEAR 
+      HAVING AVG(SALVALUE) > (SELECT AVG(SALARY.SALVALUE) FROM SALARY);
 ------------------------------------------------------
 КОРРЕЛИРУЮЩИЕ ПОДЗАПРОСЫ
 
