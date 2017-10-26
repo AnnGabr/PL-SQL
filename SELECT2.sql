@@ -4,7 +4,7 @@
 ------------------------------------------------------
 --1.  Найти имена сотрудников, получивших за годы начисления зарплаты минимальную зарплату.
 SELECT EMP.EMPNAME, SALARY.SALVALUE FROM EMP NATURAL 
-      JOIN SALARY WHERE SALARY.SALVALUE IN( SELECT MIN(SALARY.SALVALUE) FROM SALARY );
+      JOIN SALARY WHERE SALARY.SALVALUE = (SELECT MIN(SALARY.SALVALUE) FROM SALARY);
 ------------------------------------------------------
 --ПОДЗАПРОСЫ, ВОЗВРАЩАЮЩИЕ БОЛЕЕ ОДНОЙ СТРОКИ
 ------------------------------------------------------
@@ -45,7 +45,10 @@ SELECT YEAR FROM SALARY
 --КОРРЕЛИРУЮЩИЕ ПОДЗАПРОСЫ
 ------------------------------------------------------
 --7.  Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты.
- SELECT CAREER.DEPTNO FROM CAREER JOIN SALARY USING(EMPNO) WHERE CAREER.DEPTNO IS NOT NULL GROUP BY DEPTNO;
+  SELECT CAREER.DEPTNO FROM CAREER 
+      JOIN SALARY USING(EMPNO) 
+      WHERE SALARY.SALVALUE IS NOT NULL AND CAREER.DEPTNO IS NOT NULL 
+      GROUP BY DEPTNO;
 ------------------------------------------------------
 --ОПЕРАТОР EXISTS
 ------------------------------------------------------
