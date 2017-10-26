@@ -20,7 +20,7 @@ SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO)
 SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO) 
       WHERE (CAREER.DEPTNO, CAREER.JOBNO)
             IN( SELECT CAREER.DEPTNO, CAREER.JOBNO FROM EMP JOIN CAREER USING (EMPNO) WHERE LOWER(EMP.EMPNAME)='richard martin' ) 
-GROUP BY EMP.EMPNAME
+      GROUP BY EMP.EMPNAME
 ------------------------------------------------------
 --ОПЕРАТОРЫ ANY/ALL
 ------------------------------------------------------
