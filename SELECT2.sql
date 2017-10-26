@@ -9,10 +9,14 @@ SELECT EMP.EMPNAME, SALARY.SALVALUE FROM EMP NATURAL
 --ПОДЗАПРОСЫ, ВОЗВРАЩАЮЩИЕ БОЛЕЕ ОДНОЙ СТРОКИ
 ------------------------------------------------------
 --2.	Найти имена сотрудников, работавших или работающих в тех же отделах, в которых работал или работает сотрудник с именем RICHARD MARTIN.
-
-СРАВНЕНИЕ БОЛЕЕ ЧЕМ ПО ОДНОМУ ЗНАЧЕНИЮ
-
-3.	Найти имена сотрудников, работавших или работающих в тех же отделах и должностях, что и сотрудник 'RICHARD MARTIN'.
+SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO) 
+      WHERE CAREER.DEPTNO 
+            IN( SELECT CAREER.DEPTNO FROM EMP JOIN CAREER USING (EMPNO) WHERE LOWER(EMP.EMPNAME)='richard martin' GROUP BY CAREER.DEPTNO) 
+      GROUP BY EMP.EMPNAME
+------------------------------------------------------      
+--СРАВНЕНИЕ БОЛЕЕ ЧЕМ ПО ОДНОМУ ЗНАЧЕНИЮ
+------------------------------------------------------
+--3.	Найти имена сотрудников, работавших или работающих в тех же отделах и должностях, что и сотрудник 'RICHARD MARTIN'.
 
 ОПЕРАТОРЫ ANY/ALL
 
