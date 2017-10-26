@@ -25,7 +25,10 @@ SELECT EMP.EMPNAME FROM EMP JOIN CAREER USING (EMPNO)
 --ОПЕРАТОРЫ ANY/ALL
 ------------------------------------------------------
 --4.  Найти сведения о номерах сотрудников, получивших за какой-либо месяц зарплату большую, чем средняя зарплата   за 2007 г. или большую чем средняя зарплата за 2008г.
-
+SELECT EMPNO FROM EMP 
+      JOIN SALARY USING (EMPNO) 
+      WHERE SALARY.SALVALUE > ANY( (SELECT AVG(SALARY.SALVALUE) FROM SALARY WHERE SALARY.YEAR=2007 ), (SELECT AVG(SALARY.SALVALUE) FROM SALARY WHERE SALARY.YEAR=2008 ) )
+      GROUP BY EMPNO;
 --5.  Найти сведения о номерах сотрудников, получивших зарплату за какой-либо месяц большую, чем средние зарплаты за все годы начислений.
 
 
