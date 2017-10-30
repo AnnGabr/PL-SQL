@@ -54,7 +54,11 @@ SELECT DISTINCT DEPTNO
 --ОПЕРАТОР EXISTS
 ------------------------------------------------------
 --8.	Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты.
- SELECT DEPTNO FROM DEPT WHERE EXISTS ( SELECT * FROM CAREER JOIN SALARY USING(EMPNO) WHERE CAREER.DEPTNO=DEPT.DEPTNO);
+SELECT DISTINCT DEPTNO
+      FROM CAREER
+      WHERE EXISTS
+      (SELECT * FROM SALARY WHERE SALARY.EMPNO = CAREER.EMPNO)
+      AND DEPTNO IS NOT NULL;
 ------------------------------------------------------
 --ОПЕРАТОР NOT EXISTS
 ------------------------------------------------------
