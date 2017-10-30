@@ -63,6 +63,12 @@ SELECT DISTINCT DEPTNO
 --ОПЕРАТОР NOT EXISTS
 ------------------------------------------------------
 --9.	Определить номера отделов, для сотрудников которых не начислялась зарплата.
+SELECT DISTINCT DEPTNO
+      FROM CAREER
+      WHERE NOT EXISTS
+      (SELECT * FROM SALARY WHERE SALARY.EMPNO = CAREER.EMPNO)
+      AND DEPTNO IS NOT NULL;
+      
  SELECT DEPTNO FROM DEPT WHERE NOT EXISTS ( SELECT * FROM CAREER JOIN SALARY USING(EMPNO) WHERE CAREER.DEPTNO=DEPT.DEPTNO);
 ------------------------------------------------------
 --СОСТАВНЫЕ ЗАПРОСЫ
