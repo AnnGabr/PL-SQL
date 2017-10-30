@@ -44,10 +44,12 @@ SELECT YEAR FROM SALARY
 --КОРРЕЛИРУЮЩИЕ ПОДЗАПРОСЫ
 ------------------------------------------------------
 --7.  Определить номера отделов, в которых работали или работают сотрудники, имеющие начисления зарплаты.
-  SELECT CAREER.DEPTNO FROM CAREER 
-      JOIN SALARY USING(EMPNO) 
-      WHERE SALARY.SALVALUE IS NOT NULL AND CAREER.DEPTNO IS NOT NULL 
-      GROUP BY DEPTNO;
+SELECT DISTINCT DEPTNO
+      FROM CAREER
+      WHERE (SELECT COUNT(*)
+                  FROM SALARY
+                  WHERE SALARY.EMPNO = CAREER.EMPNO ) > 0
+            AND DEPTNO IS NOT NULL;
 ------------------------------------------------------
 --ОПЕРАТОР EXISTS
 ------------------------------------------------------
@@ -73,7 +75,7 @@ SELECT TRUNC(AVG(SALARY.SALVALUE)) FROM SALARY GROUP BY YEAR;
 --ОПЕРАТОР CASE
 ------------------------------------------------------
 --12. Разделите сотрудников на возрастные группы: A) возраст 20-30 лет; B) 31-40 лет; C) 41-50; D) 51-60 или возраст не определён.
-
+      
 --13.	Перекодируйте номера отделов, добавив перед номером отдела буквы BI для номеров <=20,  буквы  LN для номеров >=30.
 SELECT 
       CASE 
