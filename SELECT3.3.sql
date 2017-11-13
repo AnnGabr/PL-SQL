@@ -12,11 +12,11 @@ ON t1.empno = t2.manager_id;
 -- Используйте функцию SYS_CONNECT_BY_PATH получите CLARK и его руководителя ALLEN, затем руководителя ALLEN ― JOHN KLINTON.
 -- Для обхода дерева используйте оператор CONNECT BY.
 -- А также ключевые слова иерархических запросов LEVEL, START WITH, CONNECT BY PRIOR; функцию LTRIM.
-SELECT ltrim(sys_connect_by_path(empname,'-->'), '-->') leaf___branch___root
-FROM emp
-WHERE level = 3
-    START WITH empname = 'CLARK'
-    CONNECT BY PRIOR manager_id = empno;
+SELECT LTRIM(SYS_CONNECT_BY_PATH(EMPNAME,'-->'), '-->') 
+FROM EMP
+WHERE MANAGER_ID IS NULL
+    START WITH EMPNAME = 'CLARK'
+    CONNECT BY PRIOR MANAGER_ID = EMPNO;
 -- SYS_CONNECT_BY_PATH is valid only in hierarchical queries.
 -- It returns the path of a column value from root to node, with column 
 -- values separated by char for each row returned by CONNECT BY condition. 
