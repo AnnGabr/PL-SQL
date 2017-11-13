@@ -19,13 +19,11 @@ WHERE level = 3
     CONNECT BY PRIOR manager_id = empno;
 -- SYS_CONNECT_BY_PATH is valid only in hierarchical queries.
 -- It returns the path of a column value from root to node, with column 
--- values separated by char for each row returned by CONNECT BY condition.
- 
- 
+-- values separated by char for each row returned by CONNECT BY condition. 
 -- В решении для Oracle всю работу выполняет оператор CONNECT BY.
--- Начиная с CLARK, проходим весь путь до JOHN KLIN без всяких объедине!
--- ний. Выражение в операторе CONNECT BY определяет отношения ме!
--- жду данными и то, как будет выполняться обход дерева:
+-- Начиная с CLARK, проходим весь путь до JOHN KLIN без всяких объединений. 
+-- Выражение в операторе CONNECT BY определяет отношения между данными и то, как будет выполняться обход дерева.
+
 -- 4. Иерархическое представление таблицы
 SELECT ltrim(sys_connect_by_path(empname,'-->'), '-->') emp_tree
 FROM emp
