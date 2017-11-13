@@ -4,9 +4,9 @@ FROM emp t1, emp t2
 WHERE t1.manager_id = t2.empno;
  
 --Требуется представить имя каждого сотрудника таблицы EMP (даже сотрудника, которому не назначен руководитель) и имя его руководителя.
-SELECT t2.empname || ' works for ' || t1.empname as Emp_Manager  
-FROM emp t1 RIGHT JOIN emp t2
-ON t1.empno = t2.manager_id;
+SELECT empname || ' reports to ' || PRIOR empname AS 'Walk top down'  
+START WITH MANAGER_ID IS NULL
+CONNECT BY PRIOR empno = manager_id;
  
 -- Требуется показать иерархию от CLARK до JOHN KLINTON:
 -- Используйте функцию SYS_CONNECT_BY_PATH получите CLARK и его руководителя ALLEN, затем руководителя ALLEN ― JOHN KLINTON.
