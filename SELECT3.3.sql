@@ -1,9 +1,11 @@
 --Предствить имя каждого сотрудника тфблицы EMP и имя его руководителя:
+-----------------------------------------------------------------------
 SELECT t1.empname || ' works for ' || t2.empname as Emp_Manager
 FROM emp t1, emp t2
 WHERE t1.manager_id = t2.empno;
  
 --Требуется представить имя каждого сотрудника таблицы EMP (даже сотрудника, которому не назначен руководитель) и имя его руководителя.
+-----------------------------------------------------------------------
 SELECT empname || ' reports to ' || PRIOR empname AS 'Walk top down'  
 START WITH MANAGER_ID IS NULL
 CONNECT BY PRIOR empno = manager_id;
@@ -12,6 +14,7 @@ CONNECT BY PRIOR empno = manager_id;
 -- Используйте функцию SYS_CONNECT_BY_PATH получите CLARK и его руководителя ALLEN, затем руководителя ALLEN ― JOHN KLINTON.
 -- Для обхода дерева используйте оператор CONNECT BY.
 -- А также ключевые слова иерархических запросов LEVEL, START WITH, CONNECT BY PRIOR; функцию LTRIM.
+-----------------------------------------------------------------------
 SELECT LTRIM(SYS_CONNECT_BY_PATH(EMPNAME,'-->'), '-->') 
 FROM EMP
 WHERE MANAGER_ID IS NULL
@@ -25,6 +28,7 @@ WHERE MANAGER_ID IS NULL
 -- Выражение в операторе CONNECT BY определяет отношения между данными и то, как будет выполняться обход дерева.
 
 -- 4. Иерархическое представление таблицы
+-----------------------------------------------------------------------
 SELECT ltrim(sys_connect_by_path(empname,'-->'), '-->') emp_tree
 FROM emp
     START WITH manager_id IS NULL
@@ -35,6 +39,7 @@ ORDER BY 1;
 -- Требуется показать уровень иерархии каждого сотрудника:
 -- SHOW LPAD('Page 1',15,'*.')
 -- *.*.*.*.*Page 1
+-----------------------------------------------------------------------
 SELECT lpad(empname,2*(level - 1) + length(empname),'.') emp_tree
     FROM emp
     START WITH manager_id IS NULL  
@@ -42,6 +47,7 @@ SELECT lpad(empname,2*(level - 1) + length(empname),'.') emp_tree
  
  
 -- 6. Требуется найти всех служащих, которые явно или  неявно подчиняются ALLEN:
+-----------------------------------------------------------------------
 SELECT empname  
 FROM emp
 START WITH empname = 'ALLEN'
