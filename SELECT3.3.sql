@@ -3,34 +3,22 @@ SELECT t1.empname || ' works for ' || t2.empname as Emp_Manager
 FROM emp t1, emp t2
 WHERE t1.manager_id = t2.empno;
  
--- Требуется представить имя каждого сотрудника таблицы EMP (даже сотрудника,
--- которому не назначен руководитель) и имя его руководителя.
--- Результирующий набор строк первого запроса:
- 
+--Требуется представить имя каждого сотрудника таблицы EMP (даже сотрудника, которому не назначен руководитель) и имя его руководителя.
 SELECT t2.empname || ' works for ' || t1.empname as Emp_Manager  
 FROM emp t1 RIGHT JOIN emp t2
 ON t1.empno = t2.manager_id;
--- Чтобы увидеть строку служащего KING при использовании метода с рефлексивным объ!
--- единением, необходимо выполнить внешнее объединение, как показа!
--- но в следующих двух запросах.
  
- 
--- Задача
 -- Требуется показать иерархию от CLARK до JOHN KLINTON:
--- Используйте функцию SYS_CONNECT_BY_PATH получите CLARK и его
--- руководителя ALLEN, затем руководителя ALLEN ― JOHN KLINTON.
--- Для
--- обхода дерева используйте оператор CONNECT BY.
--- А также
--- ключевые слова иерархических запросов LEVEL, START WITH, CONNECT BY
--- PRIOR; функцию LTRIM.
+-- Используйте функцию SYS_CONNECT_BY_PATH получите CLARK и его руководителя ALLEN, затем руководителя ALLEN ― JOHN KLINTON.
+-- Для обхода дерева используйте оператор CONNECT BY.
+-- А также ключевые слова иерархических запросов LEVEL, START WITH, CONNECT BY PRIOR; функцию LTRIM.
 SELECT ltrim(sys_connect_by_path(empname,'-->'), '-->') leaf___branch___root
 FROM emp
 WHERE level = 3
     START WITH empname = 'CLARK'
     CONNECT BY PRIOR manager_id = empno;
 -- SYS_CONNECT_BY_PATH is valid only in hierarchical queries.
--- It returns the path of a column value from root to node, with column
+-- It returns the path of a column value from root to node, with column 
 -- values separated by char for each row returned by CONNECT BY condition.
  
  
@@ -38,8 +26,6 @@ WHERE level = 3
 -- Начиная с CLARK, проходим весь путь до JOHN KLIN без всяких объедине!
 -- ний. Выражение в операторе CONNECT BY определяет отношения ме!
 -- жду данными и то, как будет выполняться обход дерева:
- 
- 
 -- 4. Иерархическое представление таблицы
 SELECT ltrim(sys_connect_by_path(empname,'-->'), '-->') emp_tree
 FROM emp
@@ -57,8 +43,7 @@ SELECT lpad(empname,2*(level - 1) + length(empname),'.') emp_tree
     CONNECT BY PRIOR empno = manager_id;
  
  
--- 6
--- Требуется найти всех служащих, которые явно или  неявно подчиняются ALLEN:
+-- 6. Требуется найти всех служащих, которые явно или  неявно подчиняются ALLEN:
 SELECT empname  
 FROM emp
 START WITH empname = 'ALLEN'
