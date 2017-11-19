@@ -44,6 +44,18 @@ SELECT STARTDATE, MONTHS_BETWEEN(LEAD(STARTDATE, 1) over (ORDER BY STARTDATE), S
 --Требуется подсчитать количество дней в году по столбцу START_DATE:
 SELECT STARTDATE YEAR, ADD_MONTHS(TRUNC(STARTDATE, 'YEAR'), 12) - TRUNC(STARTDATE, 'YEAR') DAYS FROM CAREER ORDER BY STARTDATE;
 
+---------------------------------------------------------------------
+--Pазложить текущую дату на день, месяц, год, секунды, минуты, часы. Результаты вернуть в численном виде:
+SELECT extract(year from sysdate) YEAR, 
+       extract(month from sysdate) MONTH, 
+       extract(day from sysdate) DAY, 
+       to_number(to_char(sysdate, 'hh24')) H, 
+       to_char(sysdate, 'mi') M, 
+       to_char(sysdate, 'ss') S 
+ FROM dual;
+ 
+ ---------------------------------------------------------------------
+   
 
 
 
