@@ -72,6 +72,11 @@ SELECT
 FROM DUAL;
 ---------------------------------------------------------------------
 --Сформируйте список понедельников текущего года:
+SELECT ROWNUM AS n, TRUNC(SYSDATE,'YEAR') + ROWNUM - 1 AS DAY
+  FROM all_objects
+  WHERE 
+    ROWNUM <= ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 12) - TRUNC(SYSDATE, 'YEAR') 
+    AND TO_CHAR(TRUNC(SYSDATE,'YEAR') + ROWNUM - 1, 'fmDY', 'NLS_DATE_LANGUAGE=AMERICAN') = 'MON';
 
 ---------------------------------------------------------------------
 --Cоздать календарь на текущий месяц. Календарь должен иметь семь столбцов в ширину и пять строк вниз:
@@ -91,7 +96,7 @@ SELECT
         WHERE ROWNUM <= TO_NUMBER(TO_CHAR(LAST_DAY(SYSDATE), 'DD'))
   )
 GROUP BY week_num
-ORDER BY week_num
+ORDER BY week_num;
 
   
 
