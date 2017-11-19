@@ -72,9 +72,27 @@ SELECT
 FROM DUAL;
 ---------------------------------------------------------------------
 --Сформируйте список понедельников текущего года:
+
 ---------------------------------------------------------------------
 --Cоздать календарь на текущий месяц. Календарь должен иметь семь столбцов в ширину и пять строк вниз:
-
+SELECT
+       MAX(DECODE (day_of_week, 'MON', dd, NULL)) Mon,
+       MAX(DECODE (day_of_week, 'TUE', dd, NULL)) Tue,
+       MAX(DECODE (day_of_week, 'WED', dd, NULL)) Wed,
+       MAX(DECODE (day_of_week, 'THU', dd, NULL)) Thu,
+       MAX(DECODE (day_of_week, 'FRI', dd, NULL)) Fri,
+       MAX(DECODE (day_of_week, 'SAT', dd, NULL)) Sat,
+       MAX(DECODE (day_of_week, 'SUN', dd, NULL)) Sun
+  FROM (
+       SELECT ROWNUM AS dd,
+              TO_CHAR (TRUNC(SYSDATE,'MM') + ROWNUM - 1,
+                       'DY', 'NLS_DATE_LANGUAGE=AMERICAN') AS day_of_week,
+              TO_CHAR (TRUNC(SYSDATE,'MM')+ROWNUM-1, 'IW') AS week_num
+        FROM all_objects
+        WHERE ROWNUM <= TO_NUMBER(TO_CHAR(LAST_DAY(SYSDATE), 'DD'))
+  )
+GROUP BY week_num
+ORDER BY week_num
 
   
 
