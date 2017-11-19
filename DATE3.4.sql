@@ -58,6 +58,22 @@ SELECT extract(year from sysdate) YEAR,
 --Требуется получить первый и последний дни текущего месяца:
 SELECT sysdate, extract(day from LAST_DAY(sysdate)) LAST_DAY FROM DUAL;
 
+---------------------------------------------------------------------
+--Bозвратить даты начала и конца каждого из четырех кварталов данного года:
+SELECT 
+  TRUNC(SYSDATE, 'YEAR') s_1, 
+    LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 2)) e_1, 
+  ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 3) s_2, 
+    LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 5)) e_2,
+  ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 6) s_3, 
+    LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 8)) e_3,
+  ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 9) s_4, 
+    LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 11)) e_4
+FROM DUAL;
+---------------------------------------------------------------------
+--Сформируйте список понедельников текущего года:
+---------------------------------------------------------------------
+--Cоздать календарь на текущий месяц. Календарь должен иметь семь столбцов в ширину и пять строк вниз:
 
 
   
