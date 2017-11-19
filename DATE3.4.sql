@@ -40,6 +40,9 @@ SELECT STARTDATE, MONTHS_BETWEEN(LEAD(STARTDATE, 1) over (ORDER BY STARTDATE), S
   WHERE DEPTNO = 20 
   ORDER BY STARTDATE;
 
+---------------------------------------------------------------------
+--Требуется подсчитать количество дней в году по столбцу START_DATE:
+SELECT STARTDATE YEAR, ADD_MONTHS(TRUNC(STARTDATE, 'YEAR'), 12) - TRUNC(STARTDATE, 'YEAR') DAYS FROM CAREER ORDER BY STARTDATE;
 
 
 
