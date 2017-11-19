@@ -32,6 +32,16 @@ SELECT (ab.STARTDATE - jm.STARTDATE) FROM
 SELECT TRUNC(ABS(MONTHS_BETWEEN(TO_DATE ('2003/01/01', 'yyyy/mm/dd'), TO_DATE ('2003/03/14', 'yyyy/mm/dd')))) AS RESULT FROM DUAL;
 SELECT TRUNC(ABS(MONTHS_BETWEEN(TO_DATE('2005/01/01', 'yyyy/mm/dd'), TO_DATE('2003/01/01', 'yyyy/mm/dd'))/12)) AS RESULT FROM DUAL;
 
+---------------------------------------------------------------------
+--Для каждого сотрудника 20-го отдела найти сколько дней прошло между датой его приема на работу 
+--и датой приема на работу следующего сотрудника:
+SELECT STARTDATE, MONTHS_BETWEEN(LEAD(STARTDATE, 1) over (ORDER BY STARTDATE), STARTDATE) MONTHS_TO_NEXT 
+  FROM CAREER 
+  WHERE DEPTNO = 20 
+  ORDER BY STARTDATE;
+
+
+
 
 
   
