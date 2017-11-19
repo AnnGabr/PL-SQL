@@ -54,8 +54,9 @@ SELECT extract(year from sysdate) YEAR,
        to_char(sysdate, 'ss') S 
  FROM dual;
  
- ---------------------------------------------------------------------
-   
+---------------------------------------------------------------------
+--Требуется получить первый и последний дни текущего месяца:
+SELECT sysdate, extract(day from LAST_DAY(sysdate)) LAST_DAY FROM DUAL;
 
 
 
