@@ -17,7 +17,6 @@ SELECT ADD_MONTHS(STARTDATE, -12) AS BEFORE_ONE_Y, ADD_MONTHS(STARTDATE, 12) AS 
                           
 ---------------------------------------------------------------------
 --Вычислите разницу в днях между датами приема на работу сотрудников JOHN MARTIN и ALEX BOUSH:
-
 SELECT (ab.STARTDATE - jm.STARTDATE) FROM 
   (
     SELECT STARTDATE FROM CAREER 
@@ -27,4 +26,13 @@ SELECT (ab.STARTDATE - jm.STARTDATE) FROM
     SELECT STARTDATE FROM CAREER 
     WHERE CAREER.EMPNO = (SELECT EMPNO FROM EMP WHERE LOWER(EMP.EMPNAME) = 'john martin')
   ) jm;
+
+---------------------------------------------------------------------
+--Требуется найти разность между двумя датами в месяцах и в годах:
+SELECT TRUNC(ABS(MONTHS_BETWEEN(TO_DATE ('2003/01/01', 'yyyy/mm/dd'), TO_DATE ('2003/03/14', 'yyyy/mm/dd')))) AS RESULT FROM DUAL;
+SELECT TRUNC(ABS(MONTHS_BETWEEN(TO_DATE('2005/01/01', 'yyyy/mm/dd'), TO_DATE('2003/01/01', 'yyyy/mm/dd'))/12)) AS RESULT FROM DUAL;
+
+
+
+  
 
