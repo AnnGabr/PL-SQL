@@ -85,9 +85,8 @@ SELECT
        MAX(DECODE (day_of_week, 'SUN', dd, NULL)) Sun
   FROM (
        SELECT ROWNUM AS dd,
-              TO_CHAR (TRUNC(SYSDATE,'MM') + ROWNUM - 1,
-                       'DY', 'NLS_DATE_LANGUAGE=AMERICAN') AS day_of_week,
-              TO_CHAR (TRUNC(SYSDATE,'MM')+ROWNUM-1, 'IW') AS week_num
+              TO_CHAR (TRUNC(SYSDATE,'MM') + ROWNUM - 1, 'DY', 'NLS_DATE_LANGUAGE=AMERICAN') AS day_of_week,
+              TO_CHAR (TRUNC(SYSDATE,'MM') + ROWNUM - 1, 'IW') AS week_num
         FROM all_objects
         WHERE ROWNUM <= TO_NUMBER(TO_CHAR(LAST_DAY(SYSDATE), 'DD'))
   )
