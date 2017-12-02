@@ -12,13 +12,14 @@
 ---------------------------------------------
 SELECT NAME, WEIGHT, HEIGHT,
     CASE
-        WHEN WEIGHT/HEIGHT/HEIGHT*10000 < 25
+        WHEN WEIGHT/HEIGHT/HEIGHT*10000 < 25 AND WEIGHT/HEIGHT/HEIGHT*10000 > 20
             THEN 'IN NORM'
         ELSE 'NOT IN NORM'
     END BODY_MASS_INDEX
     FROM JOCKEYS
     
 --3. WITH():
+
 --4. встроенное представление():
 --5. некоррелированный запрос:
 (academy.oracle.com\iLearning\2013-2014 Oracle Academy Database Programming with SQL – Student\Section 6 Creating Subqueries);
