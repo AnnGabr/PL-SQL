@@ -47,6 +47,7 @@ SELECT NAME, WEIGHT, HEIGHT, BIRTH_DATE, NULLIF(HEIGHT, 182) NULL_IF_182 FROM JO
 
 --8. NVL2:
 ---------------------------------------------
+SELECT NVL2(NAME, NAME, 'NO MATTER') COMP_NAME FROM COMPETITIONS;
 
 --9. TOP-N анализ():
 ---------------------------------------------
