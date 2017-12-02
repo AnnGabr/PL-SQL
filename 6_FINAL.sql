@@ -43,6 +43,7 @@ SELECT NAME, WEIGHT, HEIGHT FROM JOCKEYS ONE WHERE WEIGHT > (SELECT AVG(WEIGHT) 
 
 --7. NULLIF:
 ---------------------------------------------
+SELECT NAME, WEIGHT, HEIGHT, BIRTH_DATE, NULLIF(HEIGHT, 182) NULL_IF_182 FROM JOCKEYS;
 
 --8. NVL2:
 ---------------------------------------------
