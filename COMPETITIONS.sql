@@ -1,8 +1,9 @@
+DROP TABLE results;
 DROP TABLE competitions;
 DROP TABLE jockeys;
-DROP TABLE owners;
 DROP TABLE horses;
 DROP TABLE hippodrome;
+DROP TABLE owners;
 DROP SEQUENCE ID_SEQUENCE;
 
 CREATE SEQUENCE ID_SEQUENCE
@@ -39,7 +40,7 @@ ALTER TABLE horses
 
 ALTER TABLE horses ADD CONSTRAINT horses_pk PRIMARY KEY ( horse_id );
 
-CREATE TABLE joсkeys (
+CREATE TABLE jockeys (
     jockey_id   INTEGER NOT NULL,
     name      	VARCHAR2(50 CHAR) NOT NULL,
     address   	VARCHAR2(70 CHAR) NOT NULL,   
@@ -48,15 +49,15 @@ CREATE TABLE joсkeys (
     birth_date DATE NOT NULL
 );
 
-ALTER TABLE joсkeys ADD CHECK (
+ALTER TABLE jockeys ADD CHECK (
     weight > 0
 );
 
-ALTER TABLE joсkeys ADD CHECK (
+ALTER TABLE jockeys ADD CHECK (
     height > 0
 );
 
-ALTER TABLE joсkeys ADD CONSTRAINT joсkeys_pk PRIMARY KEY ( jockey_id );
+ALTER TABLE jockeys ADD CONSTRAINT jockeys_pk PRIMARY KEY ( jockey_id );
 
 CREATE TABLE owners (
     owner_id   INTEGER NOT NULL,
@@ -69,7 +70,7 @@ ALTER TABLE owners ADD CONSTRAINT owners_pk PRIMARY KEY ( owner_id );
 CREATE TABLE hippodrome (
     hip_id 	INTEGER PRIMARY KEY,
     name 	VARCHAR2(30 CHAR) NOT NULL,
-    owner_id 	REFERENCES owners(owner_id) NOT NULL NOT DEFERRABLE ON DELETE CASCADE
+    owner_id 	INTEGER NOT NULL
 );
 
 CREATE TABLE results (
@@ -90,30 +91,31 @@ ALTER TABLE results ADD CHECK (
 
 CREATE INDEX horse_arrival_number ON results(arrival_number);
 
-ALTER TABLE results ADD CONSTRAINT results_pk PRIMARY KEY ( competitions_comp_id, horses_horse_id );
+ALTER TABLE results ADD CONSTRAINT results_pk PRIMARY KEY ( comp_id, horse_id );
 
 ALTER TABLE horses
     ADD CONSTRAINT horses_owners_fk FOREIGN KEY ( owner_id )
         REFERENCES owners ( owner_id )
-    NOT DEFERRABLE
     ON DELETE CASCADE;
 
 ALTER TABLE results
-    ADD CONSTRAINT results_competitions_fk FOREIGN KEY ( comp_id )
+    ADD CONSTRAINT res_comp_fk FOREIGN KEY ( comp_id )
         REFERENCES competitions ( comp_id )
-    NOT DEFERRABLE
     ON DELETE CASCADE;
 
 ALTER TABLE results
-    ADD CONSTRAINT results_horses_fk FOREIGN KEY ( horse_id )
+    ADD CONSTRAINT res_horses_fk FOREIGN KEY ( horse_id )
         REFERENCES horses ( horse_id )
-    NOT DEFERRABLE
     ON DELETE CASCADE;
 
 ALTER TABLE results
-    ADD CONSTRAINT results_joсkeys_fk FOREIGN KEY ( jockey_id )
-        REFERENCES joсkeys ( jockey_id )
-    NOT DEFERRABLE
+    ADD CONSTRAINT res_jockeys_fk FOREIGN KEY ( jockey_id )
+        REFERENCES jockeys ( jockey_id )
+    ON DELETE CASCADE;
+    
+ALTER TABLE hippodrome
+    ADD CONSTRAINT hip_owners_fk FOREIGN KEY ( owner_id )
+        REFERENCES owners ( owner_id )
     ON DELETE CASCADE;
 
 --populate
@@ -140,20 +142,20 @@ INSERT INTO HIPPODROME VALUES
 INSERT INTO HORSES VALUES
     (1, 'Donald' , 'm', 	 to_date('01-01-2015', 'dd-mm-yyyy'), 1);
 INSERT INTO HORSES VALUES
-    (2, 'Anton Palych', 'm',	 to_date('01-01-2016', 'dd-mm-yyyy'), 1);
+    (2, 'Anton Palych', 'f',	 to_date('01-01-2016', 'dd-mm-yyyy'), 1);
 INSERT INTO HORSES VALUES
     (3, 'Alan', 'm',		 to_date('01-01-2015', 'dd-mm-yyyy'), 2);
 INSERT INTO HORSES VALUES
     (4, 'Smith', 'm',		 to_date('01-01-2016', 'dd-mm-yyyy'), 2);
 
 INSERT INTO COMPETITIONS VALUES
-    (1, 'Champton Gran Prx' , to_timestamp('YYYY-MM-DD HH24:MI','2017-03-15 09:30') , 'Champton', 5);
+    (1, 'Champton Gran Prx' , to_date('2017-03-15 09:30', 'YYYY-MM-DD HH24:MI') , 'Champton', 5);
 INSERT INTO COMPETITIONS VALUES
-    (2, 'Champton Gran Prx' , to_timestamp('YYYY-MM-DD HH24:MI','2017-05-15 09:30'), 'Champton', 4);
+    (2, 'Champton Gran Prx' , to_date('2017-05-15 09:30', 'YYYY-MM-DD HH24:MI'), 'Champton', 4);
 INSERT INTO COMPETITIONS VALUES
-    (3, 'Bringhton Gran Prx' , to_timestamp('YYYY-MM-DD HH24:MI','2017-01-15 09:30'), 'Bringhton', 10);
+    (3, 'Bringhton Gran Prx' , to_date('2017-01-15 09:30', 'YYYY-MM-DD HH24:MI'), 'Bringhton', 10);
 INSERT INTO COMPETITIONS VALUES
-    (4, 'Bringhton Gran Prx' , to_timestamp('YYYY-MM-DD HH24:MI','2017-09-15 09:30'), 'Bringhton', 7);
+    (4, 'Bringhton Gran Prx' , to_date('2017-09-15 09:30', 'YYYY-MM-DD HH24:MI'), 'Bringhton', 7);
 
 INSERT INTO RESULTS VALUES
     (1, 2, 1, 1, 1);
@@ -171,5 +173,5 @@ INSERT INTO RESULTS VALUES
 CREATE OR REPLACE TRIGGER fkntm_horses BEFORE
     UPDATE OF owner_id ON horses
 BEGIN
-    raise_application_error(-20225,'Non Transferable FK constraint  on table HORSES is violated');
+    raise_application_error(-20225,'Non Transferable FK constraint on table HORSES is violated');
 END;
