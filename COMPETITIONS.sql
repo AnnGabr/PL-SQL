@@ -28,7 +28,7 @@ CREATE TABLE horses (
     name              VARCHAR2(20 CHAR) NOT NULL,
     gender            CHAR(1) NOT NULL,
     birth_date        DATE NOT NULL,
-    owner_id   INTEGER NOT NULL
+    owner_id          INTEGER NOT NULL
 );
 
 ALTER TABLE horses
@@ -46,7 +46,7 @@ CREATE TABLE jockeys (
     address   	VARCHAR2(70 CHAR) NOT NULL,   
     weight    	FLOAT NOT NULL,
     height    	FLOAT NOT NULL,
-    birth_date DATE NOT NULL
+    birth_date  DATE NOT NULL
 );
 
 ALTER TABLE jockeys ADD CHECK (
@@ -68,8 +68,8 @@ CREATE TABLE owners (
 ALTER TABLE owners ADD CONSTRAINT owners_pk PRIMARY KEY ( owner_id );
 
 CREATE TABLE hippodrome (
-    hip_id 	INTEGER PRIMARY KEY,
-    name 	VARCHAR2(30 CHAR) NOT NULL,
+    hip_id 	    INTEGER PRIMARY KEY,
+    name 	    VARCHAR2(30 CHAR) NOT NULL,
     owner_id 	INTEGER NOT NULL
 );
 
@@ -77,8 +77,8 @@ CREATE TABLE results (
     arrival_number      INTEGER NOT NULL,
     run_number          INTEGER NOT NULL,
     horse_id        	INTEGER NOT NULL,
-    comp_id   		INTEGER NOT NULL,
-    jockey_id      	INTEGER NOT NULL
+    comp_id   		    INTEGER NOT NULL,
+    jockey_id      	    INTEGER NOT NULL
 );
 
 ALTER TABLE results ADD CHECK (
@@ -125,9 +125,9 @@ INSERT INTO JOCKEYS VALUES
 INSERT INTO JOCKEYS VALUES
     (2, 'John', '45 Herz st, CH'        , 179, 75, to_date('10-01-1983', 'dd-mm-yyyy'));
 INSERT INTO JOCKEYS VALUES
-    (3, 'Jim', '78 Shmidt rd, LA'      , 182, 73, to_date('01-11-1984', 'dd-mm-yyyy'));
+    (3, 'Jim', '78 Shmidt rd, LA'       , 182, 73, to_date('01-11-1984', 'dd-mm-yyyy'));
 INSERT INTO JOCKEYS VALUES
-    (4, 'Tom', '89 Hamburg strasse, NY', 178, 68, to_date('11-11-1985', 'dd-mm-yyyy'));
+    (4, 'Tom', '89 Hamburg strasse, NY' , 178, 68, to_date('11-11-1985', 'dd-mm-yyyy'));
 
 INSERT INTO OWNERS VALUES
     (1, 'Mr Sammers', '23 Abbey rd, London');
@@ -142,16 +142,16 @@ INSERT INTO HIPPODROME VALUES
 INSERT INTO HORSES VALUES
     (1, 'Donald' , 'm', 	 to_date('01-01-2015', 'dd-mm-yyyy'), 1);
 INSERT INTO HORSES VALUES
-    (2, 'Anton Palych', 'f',	 to_date('01-01-2016', 'dd-mm-yyyy'), 1);
+    (2, 'Molly', 'f',	     to_date('01-01-2016', 'dd-mm-yyyy'), 1);
 INSERT INTO HORSES VALUES
     (3, 'Alan', 'm',		 to_date('01-01-2015', 'dd-mm-yyyy'), 2);
 INSERT INTO HORSES VALUES
     (4, 'Smith', 'm',		 to_date('01-01-2016', 'dd-mm-yyyy'), 2);
 
 INSERT INTO COMPETITIONS VALUES
-    (1, 'Champton Gran Prx' , to_date('2017-03-15 09:30', 'YYYY-MM-DD HH24:MI') , 'Champton', 5);
+    (1, 'Champton Gran Prx' ,  to_date('2017-03-15 09:30', 'YYYY-MM-DD HH24:MI') , 'Champton', 5);
 INSERT INTO COMPETITIONS VALUES
-    (2, 'Champton Gran Prx' , to_date('2017-05-15 09:30', 'YYYY-MM-DD HH24:MI'), 'Champton', 4);
+    (2, 'Champton Gran Prx' ,  to_date('2017-05-15 09:30', 'YYYY-MM-DD HH24:MI'), 'Champton', 4);
 INSERT INTO COMPETITIONS VALUES
     (3, 'Bringhton Gran Prx' , to_date('2017-01-15 09:30', 'YYYY-MM-DD HH24:MI'), 'Bringhton', 10);
 INSERT INTO COMPETITIONS VALUES
