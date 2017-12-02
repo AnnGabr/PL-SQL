@@ -10,7 +10,14 @@
     
 --2. search CASE():
 ---------------------------------------------
-
+SELECT NAME, WEIGHT, HEIGHT,
+    CASE
+        WHEN WEIGHT/HEIGHT/HEIGHT*10000 < 25
+            THEN 'IN NORM'
+        ELSE 'NOT IN NORM'
+    END BODY_MASS_INDEX
+    FROM JOCKEYS
+    
 --3. WITH():
 --4. встроенное представление():
 --5. некоррелированный запрос:
