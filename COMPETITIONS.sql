@@ -44,8 +44,8 @@ CREATE TABLE jockeys (
     jockey_id   INTEGER NOT NULL,
     name      	VARCHAR2(50 CHAR) NOT NULL,
     address   	VARCHAR2(70 CHAR) NOT NULL,   
+    height   	FLOAT NOT NULL,
     weight    	FLOAT NOT NULL,
-    height    	FLOAT NOT NULL,
     birth_date  DATE NOT NULL
 );
 
