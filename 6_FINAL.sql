@@ -59,6 +59,7 @@ WHERE ROWNUM <= 5;
 
 --10. ROLLUP():
 ---------------------------------------------
+SELECT HEIGHT, AVG(WEIGHT) AVG_WEIGHT FROM JOCKEYS GROUP BY ROLLUP (HEIGHT) ORDER BY HEIGHT;
 
 --11. MERGE:
 ---------------------------------------------
