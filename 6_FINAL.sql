@@ -51,6 +51,11 @@ SELECT NVL2(NAME, NAME, 'NO MATTER') COMP_NAME FROM COMPETITIONS;
 
 --9. TOP-N анализ():
 ---------------------------------------------
+SELECT NAME HIGHEST_5, HEIGHT
+FROM   (SELECT *
+        FROM   JOCKEYS
+        ORDER BY HEIGHT DESC)
+WHERE ROWNUM <= 5;
 
 --10. ROLLUP():
 ---------------------------------------------
