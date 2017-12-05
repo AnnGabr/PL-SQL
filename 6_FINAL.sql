@@ -35,7 +35,7 @@ SELECT DISTINCT(OWNERS.NAME) HIS_HORSE_WHERE_FIRST
 
 --5. некоррелированный запрос:
 ---------------------------------------------
-SELECT NAME MORE_THEN_35_YEARS FROM JOCKEYS WHERE MONTHS_BETWEEN (SYSDATE, BIRTH_DATE) / 12 > 35;
+SELECT NAME, WEIGHT, HEIGHT FROM JOCKEYS ONE WHERE WEIGHT > (SELECT AVG(WEIGHT) FROM JOCKEYS);
 
 --6. коррелированный запрос:
 ---------------------------------------------
