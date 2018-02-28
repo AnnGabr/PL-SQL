@@ -306,7 +306,8 @@ CREATE OR REPLACE TRIGGER change_emp
 BEGIN
     IF :NEW.BIRTHDATE IS NULL THEN
         DBMS_OUTPUT.PUT_LINE('BIRTHDATE IS NULL');
-    ELSEIF :NEW.BIRTHDATE < to_date('01-01-1940', 'dd-mm-yyyy') THEN
+    END IF;
+    IF :NEW.BIRTHDATE < to_date('01-01-1940', 'dd-mm-yyyy') THEN
         DBMS_OUTPUT.PUT_LINE('PENTIONA');
     END IF;
 
@@ -340,3 +341,4 @@ BEGIN
     x := str2num( '456,123' );
     DBMS_OUTPUT.PUT_LINE(x);
 END;
+/
