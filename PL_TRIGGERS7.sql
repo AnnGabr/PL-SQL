@@ -73,7 +73,7 @@ CREATE OR REPLACE PROCEDURE tax_cur_for AS
 BEGIN
    FOR rec IN CUR 
    LOOP
-        SELECT SUM(SALVALUE) INTO sel_sun FROM salary
+        SELECT SUM(SALVALUE) INTO sel_sum FROM salary
              WHERE EMPNO = rec.EMPNO AND MONTH < rec.MONTH AND YEAR = rec.YEAR;
 
         UPDATE salary SET TAX =
@@ -96,7 +96,7 @@ CREATE  OR  REPLACE  PROCEDURE  tax_param (EMPID  PLS_INTEGER)  AS
 BEGIN
     FOR rec IN CUR 
     LOOP
-        SELECT SUM(SALVALUE) INTO sel_sun FROM salary
+        SELECT SUM(SALVALUE) INTO sel_sum FROM salary
              WHERE EMPNO = rec.EMPNO AND MONTH < rec.MONTH AND YEAR = rec.YEAR;
 
         UPDATE salary SET TAX =
@@ -114,7 +114,8 @@ END  Ttax_param;
 -- 04. Создайте процедуру, вычисляющую налог на зарплату за всё время начислений для конкретного
 --     сотрудника. В качестве параметров передать процент налога (до 20000, до 30000, выше 30000,
 --     номер сотрудника).
-CREATE  OR  REPLACE  PROCEDURE  tax_proc_empno (EMPID PLS_INTEGER, 
+CREATE  OR  REPLACE  PROCEDURE  tax_proc_empno (
+    EMPID PLS_INTEGER, 
     less20 NUMBER,
     more20 NUMBER,
     more30 NUMBER)  AS
@@ -123,7 +124,7 @@ CREATE  OR  REPLACE  PROCEDURE  tax_proc_empno (EMPID PLS_INTEGER,
 BEGIN
     FOR rec IN CUR 
     LOOP
-        SELECT SUM(SALVALUE) INTO sel_sun FROM salary
+        SELECT SUM(SALVALUE) INTO sel_sum FROM salary
              WHERE EMPNO = rec.EMPNO AND MONTH < rec.MONTH AND YEAR = rec.YEAR;
 
         UPDATE salary SET TAX =
@@ -132,7 +133,6 @@ BEGIN
                 WHEN sal_sum < 30000 THEN rec.SALVALUE * more20
                 ELSE rec.SALVALUE * more30
             END
-            WHERE EMPNO = rec.EMPNO AND MONTH = rec.MONTH AND YEAR = rec.YEAR;
     END LOOP;
     CLOSE CUR;
 END  tax_proc_empno;
@@ -141,32 +141,32 @@ END  tax_proc_empno;
 -- 05.  Создайте функцию, вычисляющую суммарный налог на зарплату сотрудника за всё время начислений.
 --      В качестве параметров передать процент налога (до 20000, до 30000, выше 30000, номер
 --      сотрудника). Возвращаемое значение – суммарный налог.
-CREATE  OR  REPLACE  FUNCTION  FTAX_PARAM_LESS (
-    EMPID  NUMBER,
-    UNDER_20k NUMBER,
-    OVER_20k NUMBER,
-    OVER_30k NUMBER) RETURN NUMBER  AS
-
-    CURSOR CUR IS SELECT EMPNO, SALVALUE, TAX, YEAR, MONTH FROM SALARY
-        WHERE EMPNO = EMPID;
-    SUMSAL NUMBER(16);
-    RESULT NUMBER(16);
+CREATE  OR  REPLACE  FUNCTION  tax_emp_gen (
+    EMPID PLS_INTEGER, 
+    less20 NUMBER,
+    more20 NUMBER,
+    more30 NUMBER)  AS
+    CURSOR CUR IS SELECT * FROM salary WHERE EMPNO = EMPID FOR UPDATE OF TAX;
+    sal_sum NUMBER;
+    result NUMBER;
 BEGIN
-    RESULT := 0;
-    FOR R IN CUR LOOP
-        SELECT SUM(SALVALUE) INTO SUMSAL FROM SALARY S
-            WHERE S.EMPNO = R.EMPNO AND S.MONTH < R.MONTH AND S.YEAR = R.YEAR;
+    result := 0;
+    FOR rec IN CUR 
+    LOOP
+        SELECT SUM(SALVALUE) INTO sel_sun FROM salary
+             WHERE EMPNO = rec.EMPNO AND MONTH < rec.MONTH AND YEAR = rec.YEAR;
 
-        RESULT := RESULT +
+        result := result +
             CASE
-                WHEN SUMSAL < 20000 THEN R.SALVALUE * UNDER_20k
-                WHEN SUMSAL < 30000 THEN R.SALVALUE * OVER_20k
-                ELSE R.SALVALUE * OVER_30k
+                WHEN sal_sum < 20000 THEN rec.SALVALUE * less20
+                WHEN sal_sum < 30000 THEN rec.SALVALUE * more20
+                ELSE rec.SALVALUE * more30
             END;
-
     END LOOP;
-    RETURN RESULT;
-END  FTAX_PARAM_LESS;
+    CLOSE CUR;
+    RETURN result;
+END  tax_emp_gen;
+/
 
 -- Вызов
 SELECT FTAX_PARAM_LESS(EMPNO, 1, 2, 3) FROM SALARY
