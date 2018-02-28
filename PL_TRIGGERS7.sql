@@ -12,54 +12,33 @@ ALTER TABLE SALARY ADD (TAX NUMBER(15))
 
 -- 02. 2. Составьте программу вычисления налога и вставки её в таблицу SALARY:
 -- a) с помощью простого цикла (loop) с курсором и оператора if;
-CREATE OR REPLACE PROCEDURE TAX_SIMPLE_LOOP_IF AS
-    SUMSAL NUMBER(16);
-BEGIN
-    FOR R IN (SELECT * FROM SALARY)
-    LOOP
-        SELECT SUM(SALVALUE) INTO SUMSAL FROM SALARY S
-            WHERE S.EMPNO = R.EMPNO AND S.MONTH < R.MONTH AND S.YEAR = R.YEAR;
-
-        IF SUMSAL < 20000 THEN
-            UPDATE SALARY SET TAX = R.SALVALUE * 0.09
-                WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
-        ELSIF SUMSAL < 30000 THEN
-            UPDATE SALARY SET TAX = R.SALVALUE * 0.12
-                WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
-        ELSE
-            UPDATE SALARY SET TAX = R.SALVALUE * 0.15
-                WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
-        END IF;
-    END LOOP;
-    COMMIT;
-END
-
-CREATE OR REPLACE PROCEDURE TAX_CUR_LOOP_CASE AS
-    SUMSAL NUMBER(16);
-    CURSOR CUR IS SELECT EMPNO, SALVALUE, TAX FROM SALARY FOR UPDATE OF TAX;
-    R CUR%ROWTYPE
+CREATE OR REPLACE PROCEDURE tax_loop_if AS
+    sal_sum NUMBER(15);
+    CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
+    rec CUR%ROWTYPE;
 BEGIN
     OPEN CUR;
     LOOP
-        FETCH CUR INTO R;
+        FETCH CUR INTO rec;
         EXIT WHEN CUR%NOTFOUND;
-        SELECT SUM(SALVALUE) INTO SUMSAL FROM SALARY S
-            WHERE S.EMPNO = R.EMPNO AND S.MONTH < R.MONTH AND S.YEAR = R.YEAR;
+        
+        SELECT SUM(SALVALUE) INTO sal_sum FROM salary
+            WHERE salary.EMPNO = rec.EMPNO AND salary.MONTH < rec.MONTH AND salary.YEAR = rec.YEAR;
 
-        IF SUMSAL < 20000 THEN
-            UPDATE SALARY SET TAX = R.SALVALUE * 0.09
-                WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
-        ELSIF SUMSAL < 30000 THEN
-            UPDATE SALARY SET TAX = R.SALVALUE * 0.12
-                WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
+        IF sal_sum < 20000 THEN
+            UPDATE salary SET TAX = rec.SALVALUE * 0.09
+                WHERE EMPNO = rec.EMPNO AND MONTH = rec.MONTH AND YEAR = rec.YEAR;
+        ELSIF sal_sun < 30000 THEN
+            UPDATE salary SET TAX = rec.SALVALUE * 0.12
+                WHERE EMPNO = rec.EMPNO AND MONTH = rec.MONTH AND YEAR = rec.YEAR;
         ELSE
-            UPDATE SALARY SET TAX = R.SALVALUE * 0.15
-                WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
+            UPDATE salary SET TAX = rec.SALVALUE * 0.15
+                WHERE EMPNO = rec.EMPNO AND MONTH = rec.MONTH AND YEAR = rec.YEAR;
         END IF;
     END LOOP;
     CLOSE CUR;
-    COMMIT;
-END TAX_CUR_LOOP_CASE;
+END tax_loop_if;
+/
 
 -- b) с помощью простого цикла (loop) с курсором и оператора case;
 CREATE OR REPLACE PROCEDURE TAX_LOOP_CUR_CASE AS
