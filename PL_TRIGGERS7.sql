@@ -290,7 +290,7 @@ CREATE OR REPLACE TRIGGER delete_career_rec
     FOR EACH ROW
 BEGIN
     IF :OLD.ENDDATE IS NULL THEN
-        RAISE_APPLICATION_ERROR (1, 'Can`t delete recod with NULL in ENDDATE.');
+        RAISE_APPLICATION_ERROR (-20001, 'Can`t delete recod with NULL in ENDDATE.');
     END IF;
 END delete_career_rec;
 /
