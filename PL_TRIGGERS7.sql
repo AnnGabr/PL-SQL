@@ -265,20 +265,17 @@ END tax_package;
 --      происходит обновление поля SALVALUE, то при назначении новой зарплаты, меньшей чем
 --      должностной оклад (таблица JOB, поле MINSALARY), изменение не вносится  и сохраняется старое
 --      значение, если новое значение зарплаты больше должностного оклада, то изменение вносится.
-CREATE OR REPLACE TRIGGER new_salary
-    BEFORE UPDATE OF SALVALUE ON salary FOR EACH ROW
+CREATE OR REPLACE TRIGGER new_salary 
+BEFORE UPDATE OF SALVALUE ON salary FOR EACH ROW
 DECLARE
-    CUR(EMPID CAREER.EMPNO%TYPE) IS
-        SELECT MINSALARY FROM JOB
-            WHERE JOBNO = (SELECT JOBNO FROM CAREER WHERE EMPID = EMPNO AND ENDDATE IS NULL);
     rec JOB.MINSALARY%TYPE;
 BEGIN
-    OPEN CUR(:NEW.EMPNO);
-    FETCH CUR INTO rec;
+    SELECT MINSALARY 
+        INTO rec FROM JOB 
+        WHERE JOBNO = (SELECT JOBNO FROM CAREER WHERE EMPNO = :OLD.EMPNO AND ENDDATE IS NULL);
     IF :NEW.SALVALUE < rec THEN
         :NEW.SALVALUE := :OLD.SALVALUE;
     END IF;
-    CLOSE CUR;
 END new_salary;
 /
 
