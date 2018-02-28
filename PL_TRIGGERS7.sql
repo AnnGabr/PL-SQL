@@ -13,7 +13,7 @@ ALTER TABLE SALARY ADD (TAX NUMBER(15))
 -- 02. 2. Составьте программу вычисления налога и вставки её в таблицу SALARY:
 -- a) с помощью простого цикла (loop) с курсором и оператора if;
 CREATE OR REPLACE PROCEDURE tax_loop_if AS
-    sal_sum NUMBER(15);
+    sal_sum NUMBER;
     CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
     rec CUR%ROWTYPE;
 BEGIN
@@ -42,7 +42,7 @@ END tax_loop_if;
 
 -- b) с помощью простого цикла (loop) с курсором и оператора case;
 CREATE OR REPLACE PROCEDURE tax_loop_case AS
-    sal_sum NUMBER(15);
+    sal_sum NUMBER;
     CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
     rec CUR%ROWTYPE;
 BEGIN
@@ -64,28 +64,29 @@ BEGIN
     END LOOP;
     CLOSE CUR;
 END tax_loop_case;
-
+/
 
 -- c) с помощью курсорного цикла FOR;
-CREATE OR REPLACE PROCEDURE TAX_CUR_LOOP_CASE AS
-    SUMSAL NUMBER;
-    CURSOR CUR IS SELECT EMPNO, SALVALUE, TAX, YEAR, MONTH FROM SALARY FOR UPDATE OF TAX;
+CREATE OR REPLACE PROCEDURE tax_cur_for AS
+    sel_sum NUMBER;
+    CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
 BEGIN
-   FOR R IN CUR LOOP
-         SELECT SUM(SALVALUE) INTO SUMSAL FROM SALARY S
-            WHERE S.EMPNO = R.EMPNO AND S.MONTH < R.MONTH AND S.YEAR = R.YEAR;
+   FOR rec IN CUR 
+   LOOP
+        SELECT SUM(SALVALUE) INTO sel_sun FROM salary
+             WHERE EMPNO = rec.EMPNO AND MONTH < rec.MONTH AND YEAR = rec.YEAR;
 
-        UPDATE SALARY SET TAX =
+        UPDATE salary SET TAX =
             CASE
-                WHEN SUMSAL < 20000 THEN R.SALVALUE * 0.09
-                WHEN SUMSAL < 30000 THEN R.SALVALUE * 0.12
-                ELSE R.SALVALUE * 0.15
+                WHEN sal_sum < 20000 THEN rec.SALVALUE * 0.09
+                WHEN sal_sum < 30000 THEN rec.SALVALUE * 0.12
+                ELSE rec.SALVALUE * 0.15
             END
-
-            WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
+            WHERE EMPNO = rec.EMPNO AND MONTH = rec.MONTH AND YEAR = rec.YEAR;
     END LOOP;
-    COMMIT;
-END TAX_CUR_LOOP_CASE;
+    CLOSE CUR;
+END tax_cur_for;
+/
 
 -- d) с помощью курсора с параметром, передавая номер сотрудника, для которого необходимо посчитать
 --    налог.
