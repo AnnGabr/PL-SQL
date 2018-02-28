@@ -290,7 +290,7 @@ CREATE OR REPLACE TRIGGER delete_career_rec
     FOR EACH ROW
 BEGIN
     IF :OLD.ENDDATE IS NULL THEN
-        RAISE_APPLICATION_ERROR (20212, 'Can`t delete recod with NULL in ENDDATE.');
+        RAISE_APPLICATION_ERROR (1, 'Can`t delete recod with NULL in ENDDATE.');
     END IF;
 END delete_career_rec;
 /
@@ -320,23 +320,23 @@ END change_emp;
 --     сообщения ‘ERROR: argument is not a number’ .  Исключительная ситуация возникает при задании
 --     строки в виде числа с запятой, разделяющей дробную и целую части.
 DECLARE
-    X number;
-    FUNCTION str2nr(str in varchar2) return NUMBER  IS
+    NUM NUMBER;
+    FUNCTION str2num(str in VARCHAR2) return NUMBER  IS
     BEGIN
         RETURN CAST(str AS NUMBER);
         EXCEPTION
-        WHEN VALUE_ERROR THEN
-            DBMS_OUTPUT.PUT_LINE('CLASS CAST EXCEPTION ' || str);
-            RETURN NULL;
-        WHEN OTHERS THEN
-            RAISE_APPLICATION_ERROR(-20103, 'SHOULD NOT GET THERE');
-        RETURN NULL;
+            WHEN VALUE_ERROR THEN
+                DBMS_OUTPUT.PUT_LINE('Can`t cast to num: ' || str);
+                RETURN NULL;
+            WHEN OTHERS THEN
+                RAISE_APPLICATION_ERROR(-20103, 'Unrecognized error.');
+                RETURN NULL;
     END;
 BEGIN
-    x := str2nr( '1234123' );
+    x := str2num( '654' );
     DBMS_OUTPUT.PUT_LINE(x);
-    x := str2nr( '5.1' );
+    x := str2num( '6.444' );
     DBMS_OUTPUT.PUT_LINE(x);
-    x := str2nr( '4,123' );
+    x := str2num( '456,123' );
     DBMS_OUTPUT.PUT_LINE(x);
 END;
