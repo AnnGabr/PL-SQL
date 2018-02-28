@@ -285,43 +285,16 @@ END new_salary;
 -- 08. Создайте триггер, действующий при удалении записи из таблицы CAREER. Если в удаляемой строке
 --     поле ENDDATE содержит NULL, то запись не удаляется, в противном случае удаляется.
 
-CREATE OR REPLACE  TRIGGER CHECK_NOT_NULL
+CREATE OR REPLACE TRIGGER delete_career_rec
     BEFORE DELETE ON CAREER
     FOR EACH ROW
 BEGIN
-    IF OLD.ENDDATE IS NULL
-        INSERT INTO CAREER VALUES (OLD.JOBNO, OLD.EMPNO, OLD.STARTDATE, OLD.ENDDATE);
+    IF :OLD.ENDDATE IS NULL THEN
+        RAISE_APPLICATION_ERROR (–20212, 'Can`t delete recod with NULL in ENDDATE.');
     END IF;
-END CHECK_NOT_NULL;
+END delete_career_rec;
+/
 
---- ALTERNATIVE ------------------------------------------------------------------------------------
-
-CREATE TABLE CAREER
-       (JOBNO NUMBER(4)
-             REFERENCES JOB(JOBNO) NOT NULL,
-        EMPNO NUMBER(4)
-             REFERENCES EMP(EMPNO) NOT NULL,
-        DEPTNO NUMBER(4)
-             REFERENCES DEPT(DEPTNO),
-    STARTDATE DATE
-             NOT NULL,
-    ENDDATE DATE);
-
-CREATE OR REPLACE  TRIGGER CHECK_NOT_NULL
-    BEFORE DELETE ON CAREER
-    FOR EACH ROW
-BEGIN
-    IF OLD.ENDDATE IS NULL
-        INSERT INTO CAREER_TMP VALUES (OLD.JOBNO, OLD.EMPNO, OLD.STARTDATE, OLD.ENDDATE);
-    END IF;
-END CHECK_NOT_NULL;
-
-CREATE OR REPLACE TRIGGER COPY_EMP
-    INSTEAD OF INSERT ON CAREER_TMP
-    FOR EACH ROW
-BEGIN
-   INSERT INTO CAREER VALUES (NEW.JOBNO, NEW.EMPNO, NEW.STARTDATE, NEW.ENDDATE);
-END
 -- 09. Создайте триггер, действующий на добавление или изменение данных в таблице EMP.
 --     Если во вставляемой или изменяемой строке поле BIRTHDATE содержит NULL, то после вставки или
 --     изменения должно быть выдано сообщение ‘BERTHDATE is NULL’. Если во вставляемой или изменяемой
