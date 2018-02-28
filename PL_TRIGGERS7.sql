@@ -300,20 +300,19 @@ END delete_career_rec;
 --     изменения должно быть выдано сообщение ‘BERTHDATE is NULL’. Если во вставляемой или изменяемой
 --     строке поле BIRTHDATE содержит дату ранее ‘01-01-1940’, то должно быть выдано сообщение
 --     ‘PENTIONA’. Во вновь вставляемой строке имя служащего должно быть приведено к заглавным букваь.
-CREATE OR REPLACE TRIGGER ON_EMP_INSERT_UPDATE
+CREATE OR REPLACE TRIGGER change_emp
     BEFORE INSERT OR UPDATE ON EMP
     FOR EACH ROW
 BEGIN
     IF :NEW.BIRTHDATE IS NULL THEN
         DBMS_OUTPUT.PUT_LINE('BIRTHDATE IS NULL');
-    END IF;
-
-    IF :NEW.BIRTHDATE < to_date('01-01-1940', 'dd-mm-yyyy') THEN
+    ELSEIF :NEW.BIRTHDATE < to_date('01-01-1940', 'dd-mm-yyyy') THEN
         DBMS_OUTPUT.PUT_LINE('PENTIONA');
     END IF;
 
     :NEW.EMPNAME := UPPER(:NEW.EMPNAME);
-END ON_EMP_INSERT_UPDATE;
+END change_emp;
+/
 
 --10.  Создайте программу изменения типа заданной переменной из символьного типа (VARCHAR2) в
 --     числовой тип (NUMBER).
