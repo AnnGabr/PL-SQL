@@ -13,7 +13,7 @@ ALTER TABLE SALARY ADD (TAX NUMBER(15))
 -- 02. 2. Составьте программу вычисления налога и вставки её в таблицу SALARY:
 -- a) с помощью простого цикла (loop) с курсором и оператора if;
 CREATE OR REPLACE PROCEDURE tax_loop_if AS
-    sal_sum PLS_INTEGER;
+    sal_sum NUMBER;
     CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
     rec CUR%ROWTYPE;
 BEGIN
@@ -42,7 +42,7 @@ END tax_loop_if;
 
 -- b) с помощью простого цикла (loop) с курсором и оператора case;
 CREATE OR REPLACE PROCEDURE tax_loop_case AS
-    sal_sum PLS_INTEGER;
+    sal_sum NUMBER;
     CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
     rec CUR%ROWTYPE;
 BEGIN
@@ -68,7 +68,7 @@ END tax_loop_case;
 
 -- c) с помощью курсорного цикла FOR;
 CREATE OR REPLACE PROCEDURE tax_cur_for AS
-    sel_sum PLS_INTEGER;
+    sal_sum NUMBER;
     CURSOR CUR IS SELECT * FROM salary FOR UPDATE OF TAX;
 BEGIN
    FOR rec IN CUR 
@@ -92,7 +92,7 @@ END tax_cur_for;
 --    налог.
 CREATE  OR  REPLACE  PROCEDURE  tax_param (EMPID  PLS_INTEGER)  AS
     CURSOR CUR IS SELECT * FROM salary WHERE EMPNO = EMPID FOR UPDATE OF TAX;
-    sal_sum PLS_INTEGER;
+    sal_sum NUMBER;
 BEGIN
     FOR rec IN CUR 
     LOOP
@@ -114,30 +114,29 @@ END  Ttax_param;
 -- 04. Создайте процедуру, вычисляющую налог на зарплату за всё время начислений для конкретного
 --     сотрудника. В качестве параметров передать процент налога (до 20000, до 30000, выше 30000,
 --     номер сотрудника).
-CREATE  OR  REPLACE  PROCEDURE  TAX_PARAM_LESS (EMPID  NUMBER, UNDER_20k NUMBER,
-    OVER_20k NUMBER,
-    OVER_30k NUMBER)  AS
-    CURSOR CUR IS SELECT EMPNO, SALVALUE, TAX, YEAR, MONTH FROM SALARY
-        WHERE EMPNO = EMPID
-        FOR UPDATE OF TAX;
-    SUMSAL NUMBER(16);
+CREATE  OR  REPLACE  PROCEDURE  tax_proc_empno (EMPID PLS_INTEGER, 
+    less20 NUMBER,
+    more20 NUMBER,
+    more30 NUMBER)  AS
+    CURSOR CUR IS SELECT * FROM salary WHERE EMPNO = EMPID FOR UPDATE OF TAX;
+    sal_sum NUMBER;
 BEGIN
-    FOR R IN CUR LOOP
-        SELECT SUM(SALVALUE) INTO SUMSAL FROM SALARY S
-            WHERE S.EMPNO = R.EMPNO AND S.MONTH < R.MONTH AND S.YEAR = R.YEAR;
+    FOR rec IN CUR 
+    LOOP
+        SELECT SUM(SALVALUE) INTO sel_sun FROM salary
+             WHERE EMPNO = rec.EMPNO AND MONTH < rec.MONTH AND YEAR = rec.YEAR;
 
-        UPDATE SALARY SET TAX =
+        UPDATE salary SET TAX =
             CASE
-                WHEN SUMSAL < 20000 THEN R.SALVALUE * UNDER_20k
-                WHEN SUMSAL < 30000 THEN R.SALVALUE * OVER_20k
-                ELSE R.SALVALUE * OVER_30k
+                WHEN sal_sum < 20000 THEN rec.SALVALUE * less20
+                WHEN sal_sum < 30000 THEN rec.SALVALUE * more20
+                ELSE rec.SALVALUE * more30
             END
-
-            WHERE EMPNO = R.EMPNO AND MONTH = R.MONTH AND YEAR = R.YEAR;
+            WHERE EMPNO = rec.EMPNO AND MONTH = rec.MONTH AND YEAR = rec.YEAR;
     END LOOP;
-    COMMIT;
-END  TAX_PARAM_LESS;
-
+    CLOSE CUR;
+END  tax_proc_empno;
+/
 
 -- 05.  Создайте функцию, вычисляющую суммарный налог на зарплату сотрудника за всё время начислений.
 --      В качестве параметров передать процент налога (до 20000, до 30000, выше 30000, номер
