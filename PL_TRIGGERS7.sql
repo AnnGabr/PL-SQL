@@ -321,24 +321,24 @@ END change_emp;
 --     сообщения ‘ERROR: argument is not a number’ .  Исключительная ситуация возникает при задании
 --     строки в виде числа с запятой, разделяющей дробную и целую части.
 DECLARE
-    NUM NUMBER;
+    num NUMBER;
     FUNCTION str2num(str in VARCHAR2) return NUMBER  IS
     BEGIN
         RETURN CAST(str AS NUMBER);
         EXCEPTION
             WHEN VALUE_ERROR THEN
-                DBMS_OUTPUT.PUT_LINE('Can`t cast to num: ' || str);
+                DBMS_OUTPUT.PUT_LINE('ERROR: argument is not a number or wrong number format: ' || str);
                 RETURN NULL;
             WHEN OTHERS THEN
-                RAISE_APPLICATION_ERROR(-20103, 'Unrecognized error.');
+                RAISE_APPLICATION_ERROR(-20103, 'ERROR: unrecognized error.');
                 RETURN NULL;
     END;
 BEGIN
-    x := str2num( '654' );
-    DBMS_OUTPUT.PUT_LINE(x);
-    x := str2num( '6.444' );
-    DBMS_OUTPUT.PUT_LINE(x);
-    x := str2num( '456,123' );
-    DBMS_OUTPUT.PUT_LINE(x);
+    num := str2num( '654' );
+    DBMS_OUTPUT.PUT_LINE(num);
+    num := str2num( '6.444' );
+    DBMS_OUTPUT.PUT_LINE(num);
+    num := str2num( '456,123' );
+    DBMS_OUTPUT.PUT_LINE(num);
 END;
 /
