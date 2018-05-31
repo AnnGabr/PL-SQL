@@ -6,3 +6,9 @@
     FROM career INNER JOIN salary on career.empno = salary.empno 
       WHERE career.enddate IS NULL 
       ORDER BY ratio DESC;
+
+3-------------------------------
+SELECT salvalue, year, empno, 
+  cume_dist() OVER (PARTITION BY year ORDER BY salvalue) cume_dist, 
+  percent_rank() OVER (PARTITION BY year ORDER BY salvalue) persent_rank 
+  FROM salary;
